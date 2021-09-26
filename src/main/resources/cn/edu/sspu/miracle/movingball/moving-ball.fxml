@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -9,12 +10,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 
-<VBox alignment="CENTER" prefHeight="752.0" prefWidth="802.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="cn.edu.sspu.miracle.movingball.MovingBallController">
+<VBox alignment="CENTER" prefHeight="752.0" prefWidth="802.0" spacing="20.0" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.sspu.miracle.movingball.MovingBallController">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-   <children>
-   
-       <Label fx:id="welcomeText" />
-   </children>
+    <AnchorPane id="base" prefHeight="854.0" prefWidth="762.0"/>
 </VBox>

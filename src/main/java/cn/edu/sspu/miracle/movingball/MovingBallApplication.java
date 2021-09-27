@@ -45,29 +45,40 @@ public class MovingBallApplication extends Application {
                         MovingBallApplication.class.getResource("focus/FOCUS.BMP")
                 ).toString()
         );
-        ImageView imageView = new ImageView(image);
-        //anchorPane.getChildren().add(imageView);
+        //ImageView imageView = new ImageView(image);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         new Thread(
                 () -> {
-            int x = 0;
-            int fps = 600;
-            int period = 4000; //ms
-            int v = 0;
-            int interval = period / 2 / fps;
-            int pmToMovePerFrame = 600 / fps;
-            while (x < fps * 2) {
-                v += pmToMovePerFrame;
-                graphicsContext.drawImage(image, v, 360);
-                try {
-                    Thread.sleep(interval);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    int frames = 0;
+                    int fps = 600;
+                    int periodInSecond = 4; //s
+                    //int periodInMillisecond = periodInSecond * 1000; //ms
+                    int v = 0;
+                    int interval = 1000 / fps;
+                    int pmToMovePerFrame = 1200 / (fps * periodInSecond / 2) ;
+                    while (frames < fps * 2) {
+                        v += pmToMovePerFrame;
+                        graphicsContext.drawImage(image, v, 360);
+                        try {
+                            Thread.sleep(interval);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        graphicsContext.clearRect(v, 360, 100, 100);
+                        frames++;
+                    }
+                    while (frames < fps * 4) {
+                        v -= pmToMovePerFrame;
+                        graphicsContext.drawImage(image, v, 360);
+                        try {
+                            Thread.sleep(interval);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        graphicsContext.clearRect(v, 360, 100, 100);
+                        frames++;
+                    }
                 }
-                graphicsContext.clearRect(v, 360, 100, 100);
-                x++;
-            }
-        }
         ).start();
 
 

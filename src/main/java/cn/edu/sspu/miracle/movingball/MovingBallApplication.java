@@ -5,6 +5,8 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -17,14 +19,15 @@ import java.util.Objects;
 
 public class MovingBallApplication extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, InterruptedException {
         FXMLLoader fxmlLoader = new FXMLLoader(
                 MovingBallApplication.class.getResource("moving-ball.fxml")
         );
         Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
         stage.setTitle("Look at the car!");
         VBox vbox = (VBox) scene.lookup("#vbox");
-        AnchorPane anchorPane = (AnchorPane) scene.lookup("#base");
+        //AnchorPane anchorPane = (AnchorPane) scene.lookup("#base");
+        Canvas canvas = (Canvas) scene.lookup("#canvas");
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image(Objects.requireNonNull(
                         MovingBallApplication.class.getResource("focus/BGROUND.BMP")
@@ -43,9 +46,32 @@ public class MovingBallApplication extends Application {
                 ).toString()
         );
         ImageView imageView = new ImageView(image);
-        anchorPane.getChildren().add(imageView);
+        //anchorPane.getChildren().add(imageView);
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        new Thread(
+                () -> {
+            int x = 0;
+            int fps = 600;
+            int period = 4000; //ms
+            int v = 0;
+            int interval = period / 2 / fps;
+            int pmToMovePerFrame = 600 / fps;
+            while (x < fps * 2) {
+                v += pmToMovePerFrame;
+                graphicsContext.drawImage(image, v, 360);
+                try {
+                    Thread.sleep(interval);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                graphicsContext.clearRect(v, 360, 100, 100);
+                x++;
+            }
+        }
+        ).start();
 
-        Path path=new Path();
+
+        /*Path path=new Path();
         path.getElements().add(new MoveTo(0, 360));
         path.getElements().add(new LineTo(1280, 360));
         //path.getElements().add(new MoveTo(1280, 360));
@@ -57,7 +83,7 @@ public class MovingBallApplication extends Application {
         pt.setNode(imageView);//设置物体
         pt.setCycleCount(Timeline.INDEFINITE);//设置周期性，无线循环
         pt.setAutoReverse(true);
-        pt.play();
+        pt.play();*/
 
         stage.setScene(scene);
         stage.show();

@@ -1,5 +1,7 @@
 package cn.edu.sspu.miracle.movingball;
 
+import cn.edu.sspu.miracle.movingball.Refresh.RefreshThread;
+import cn.edu.sspu.miracle.movingball.Refresh.Refresher;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -45,7 +47,7 @@ public class MovingBallApplication extends Application {
         Background background = new Background(backgroundImage);
         vbox.setBackground(background);
 
-        Image image = new Image(
+        /*Image image = new Image(
                 Objects.requireNonNull(
                         MovingBallApplication.class.getResource("focus/FOCUS.BMP")
                 ).toString()
@@ -56,7 +58,7 @@ public class MovingBallApplication extends Application {
                         MovingBallApplication.class.getResource("focus/GELIXIAN.BMP")
                 ).toString()
         );
-        int positionY = 208 / 2 - 16;
+        int positionY = 208 / 2 - 16;*/
         GraphicsContext graphicsContextTop = canvasTop.getGraphicsContext2D();
         GraphicsContext graphicsContextMid = canvasMid.getGraphicsContext2D();
         GraphicsContext graphicsContextBottom = canvasBottom.getGraphicsContext2D();
@@ -98,12 +100,21 @@ public class MovingBallApplication extends Application {
                 }
         ).start();*/
 
-        new Thread(
+        RefreshThread refreshThread = new RefreshThread(
+                1024,
+                280,
+                1000,
+                4,
+                graphicsContextTop,
+                graphicsContextMid,
+                graphicsContextBottom
+        );
+        new Thread(refreshThread).start();
+        /*new Thread(
                 () -> {
                     int frames = 0;
                     int fps = 100;
                     int periodInSecond = 4; //s
-                    //int periodInMillisecond = periodInSecond * 1000; //ms
                     int v = 0;
                     int v1 = 0;
                     int interval = 1000 / fps;
@@ -142,7 +153,7 @@ public class MovingBallApplication extends Application {
                         }
                     }
                 }
-        ).start();
+        ).start();*/
         /*new Thread(
                 () -> {
                     int frames = 0;

@@ -4,6 +4,7 @@ import cn.edu.sspu.miracle.movingball.Refresh.RefreshThread;
 import cn.edu.sspu.miracle.movingball.Refresh.Refresher;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -46,70 +48,36 @@ public class MovingBallApplication extends Application {
         );
         Background background = new Background(backgroundImage);
         vbox.setBackground(background);
-
-        /*Image image = new Image(
+        Image imageBall = new Image(
                 Objects.requireNonNull(
                         MovingBallApplication.class.getResource("focus/FOCUS.BMP")
                 ).toString()
         );
-        //ImageView imageView = new ImageView(image);
+
         Image imageWave = new Image(
                 Objects.requireNonNull(
                         MovingBallApplication.class.getResource("focus/GELIXIAN.BMP")
                 ).toString()
         );
-        int positionY = 208 / 2 - 16;*/
+
+        int positionY = 208 / 2 - 16;
         GraphicsContext graphicsContextTop = canvasTop.getGraphicsContext2D();
         GraphicsContext graphicsContextMid = canvasMid.getGraphicsContext2D();
         GraphicsContext graphicsContextBottom = canvasBottom.getGraphicsContext2D();
 
-        /*new Thread(
-                () -> {
-                    int frames = 0;
-                    int fps = 200;
-                    int periodInSecond = 2;
-                    int v1 = 0;
-                    int interval = 1000 / fps;
-                    int pmToMovePerFrame = 200 / (fps * periodInSecond / 2);
-                    int frameCelling = fps * periodInSecond / 2;
-                    int frameFloor = 0;
-                    while (true) {
-                        while (frames < frameCelling) {
-                            v1 += pmToMovePerFrame;
-                            graphicsContextTop.drawImage(imageWave, 0, v1);
-                            try {
-                                Thread.sleep(interval);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            //graphicsContextTop.clearRect(0, v1, 1024, 1);
-                            frames++;
-                        }
-                        while (frames > frameFloor) {
-                            v1 -= pmToMovePerFrame;
-                            graphicsContextTop.drawImage(imageWave, 0, v1);
-                            try {
-                                Thread.sleep(interval);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            //graphicsContextTop.clearRect(0, v1, 1024, 1);
-                            frames--;
-                        }
-                    }
-                }
-        ).start();*/
-
         RefreshThread refreshThread = new RefreshThread(
                 1024,
                 280,
-                1000,
+                300,
                 4,
                 graphicsContextTop,
                 graphicsContextMid,
-                graphicsContextBottom
+                graphicsContextBottom,
+                imageBall,
+                imageWave
         );
         new Thread(refreshThread).start();
+
         /*new Thread(
                 () -> {
                     int frames = 0;
@@ -127,7 +95,7 @@ public class MovingBallApplication extends Application {
                             v += pmToMovePerFrame;
                             v1 += pmToMovePerFrame1;
                             graphicsContextTop.drawImage(imageWave, 0, v1);
-                            graphicsContextMid.drawImage(image, v, positionY);
+                            graphicsContextMid.drawImage(imageBall, v, positionY);
                             graphicsContextBottom.drawImage(imageWave, 0, v1);
                             try {
                                 Thread.sleep(interval);
@@ -141,7 +109,7 @@ public class MovingBallApplication extends Application {
                             v -= pmToMovePerFrame;
                             v1 -= pmToMovePerFrame1;
                             graphicsContextTop.drawImage(imageWave, 0, v1);
-                            graphicsContextMid.drawImage(image, v, positionY);
+                            graphicsContextMid.drawImage(imageBall, v, positionY);
                             graphicsContextBottom.drawImage(imageWave, 0, v1);
                             try {
                                 Thread.sleep(interval);
@@ -149,42 +117,6 @@ public class MovingBallApplication extends Application {
                                 e.printStackTrace();
                             }
                             graphicsContextMid.clearRect(v, positionY, pmToMovePerFrame, 32);
-                            frames--;
-                        }
-                    }
-                }
-        ).start();*/
-        /*new Thread(
-                () -> {
-                    int frames = 0;
-                    int fps = 200;
-                    int periodSecond = 2;
-                    int v1 = 0;
-                    int interval = 1000 / fps;
-                    int pmToMovePerFrame = 200 / (fps * periodSecond / 2);
-                    int frameCelling = fps * periodSecond / 2;
-                    int frameFloor = 0;
-                    while (true) {
-                        while (frames < frameCelling) {
-                            v1 += pmToMovePerFrame;
-                            graphicsContextBottom.drawImage(imageWave, 0, v1);
-                            try {
-                                Thread.sleep(interval);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            //graphicsContextTop.clearRect(0, v1, 1024, 1);
-                            frames++;
-                        }
-                        while (frames > frameFloor) {
-                            v1 -= pmToMovePerFrame;
-                            graphicsContextBottom.drawImage(imageWave, 0, v1);
-                            try {
-                                Thread.sleep(interval);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            //graphicsContextTop.clearRect(0, v1, 1024, 1);
                             frames--;
                         }
                     }

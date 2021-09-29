@@ -1,8 +1,13 @@
 package cn.edu.sspu.miracle.movingball.Refresh;
 
 import cn.edu.sspu.miracle.movingball.MovingBallApplication;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.util.Duration;
 
 import java.util.Objects;
 
@@ -22,6 +27,12 @@ public class RefreshThread implements Runnable {
 
     private GraphicsContext graphicsContextBottom;
 
+    private Image imageBall;
+
+    private Image imageWave;
+
+    double ballX=0;
+
     public RefreshThread(
             double pixelX,
             double pixelY,
@@ -29,7 +40,9 @@ public class RefreshThread implements Runnable {
             double period,
             GraphicsContext graphicsContextTop,
             GraphicsContext graphicsContextMid,
-            GraphicsContext graphicsContextBottom
+            GraphicsContext graphicsContextBottom,
+            Image imageBall,
+            Image imageWave
     ) {
         this.pixelX = pixelX;
         this.pixelY = pixelY;
@@ -38,6 +51,8 @@ public class RefreshThread implements Runnable {
         this.graphicsContextTop = graphicsContextTop;
         this.graphicsContextMid = graphicsContextMid;
         this.graphicsContextBottom = graphicsContextBottom;
+        this.imageBall = imageBall;
+        this.imageWave = imageWave;
     }
 
     @Override
@@ -54,17 +69,6 @@ public class RefreshThread implements Runnable {
         double pxToMovePerFrameBall = pixelX / (fps * period / 2);
         double pxToMovePerFrameWave = pixelY / (fps * period / 2);
 
-        Image imageBall = new Image(
-                Objects.requireNonNull(
-                        MovingBallApplication.class.getResource("focus/FOCUS.BMP")
-                ).toString()
-        );
-
-        Image imageWave = new Image(
-                Objects.requireNonNull(
-                        MovingBallApplication.class.getResource("focus/GELIXIAN.BMP")
-                ).toString()
-        );
         while (true) {
             while (frames < frameCelling) {
                 ballX += pxToMovePerFrameBall;
@@ -96,4 +100,5 @@ public class RefreshThread implements Runnable {
             }
         }
     }
+
 }
